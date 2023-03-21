@@ -1,0 +1,21 @@
+{
+    "name": "fluxoft/rebar-test",
+    "description": "Test app for Rebar framework",
+    "type": "project",
+    "require": {
+        "fluxoft/rebar": "^0.25.1",
+        "twig/twig": "^3.5"
+    },
+    "license": "MIT",
+    "autoload": {
+        "psr-4": {
+            "Fluxoft\\RebarTest\\": "src/"
+        }
+    },
+    "authors": [
+        {
+            "name": "Joe Hart",
+            "email": "joe.hart@gmail.com"
+        }
+    ]
+}
