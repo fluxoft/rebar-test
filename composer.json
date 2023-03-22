@@ -9,7 +9,7 @@
     "license": "MIT",
     "autoload": {
         "psr-4": {
-            "Fluxoft\\RebarTest\\": "src/"
+            "RebarTest\\": "src/"
         }
     },
     "authors": [
