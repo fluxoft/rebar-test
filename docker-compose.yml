@@ -1,0 +1,35 @@
+version: "3.9"
+
+services:
+  rebartestsite:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - '8080:80'
+    volumes:
+      - .:/var/www
+    networks:
+      - appnetwork
+    depends_on:
+      - mysql-server
+  mysql-server:
+    image: mysql:8.0
+    ports:
+      - '${DB_PORT:-3306}:3306'
+    environment:
+      - MYSQL_ROOT_PASSWORD=${DB_ROOT_PASS}
+      - MYSQL_DATABASE=${DB_NAME}
+      - MYSQL_ALLOW_EMPTY_PASSWORD=no
+      - MYSQL_USER=${DB_USER}
+      - MYSQL_PASSWORD=${DB_PASS}
+    volumes:
+      - mysqldb:/var/lib/mysql
+    networks:
+      - appnetwork
+networks:
+  appnetwork:
+    driver: bridge
+volumes:
+  mysqldb:
+    driver: local
