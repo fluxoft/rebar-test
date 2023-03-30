@@ -38,11 +38,9 @@ jobs:
 # Orchestrate jobs using workflows
 # See: https://circleci.com/docs/configuration-reference/#workflows
 workflows:
-  code-quality:
-    jobs:
-      - test
   say-hello-workflow:
     jobs:
+      - test
       - say-hello:
           requires:
             - test
