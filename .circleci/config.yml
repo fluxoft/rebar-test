@@ -43,4 +43,10 @@ workflows:
       - test
   say-hello-workflow:
     jobs:
+      - test
       - say-hello
+          requires:
+            - test
+          filters:
+            branches:
+              only: main
