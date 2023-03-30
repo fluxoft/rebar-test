@@ -44,7 +44,7 @@ workflows:
   say-hello-workflow:
     jobs:
       - test
-      - say-hello
+      - say-hello:
           requires:
             - test
           filters:
