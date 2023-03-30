@@ -5,6 +5,23 @@ version: 2.1
 # Define a job to be invoked later in a workflow.
 # See: https://circleci.com/docs/configuration-reference/#jobs
 jobs:
+  test:
+    docker:
+      - image: cimg/php:8.1
+    steps:
+      - checkout
+      - restore_cache:
+          key: dependency-cache-{{ checksum "composer.lock" }}
+      - run:
+          name: "composer install"
+          command: "composer install --prefer-dist --no-interaction"
+      - save_cache:
+          key: dependency-cache-{{ checksum "composer.lock" }}
+          paths:
+            - ./vendor
+      - run:
+          name: "PHP CodeSniffer: Source"
+          command: "vendor/bin/phpcs --standard=ruleset.xml src/"
   say-hello:
     # Specify the execution environment. You can specify an image from Docker Hub or use one of our convenience images from CircleCI's Developer Hub.
     # See: https://circleci.com/docs/configuration-reference/#executor-job
@@ -23,4 +40,10 @@ jobs:
 workflows:
   say-hello-workflow:
     jobs:
-      - say-hello
+      - test
+      - say-hello:
+          requires:
+            - test
+          filters:
+            branches:
+              only: main

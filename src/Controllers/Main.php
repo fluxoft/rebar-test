@@ -9,7 +9,7 @@ use Fluxoft\Rebar\Presenters\Twig;
 class Main extends Controller {
 	public function Setup(Container $c) {
 		/** @var Twig $presenter */
-		$presenter = $c['twig'];
+		$presenter       = $c['twig'];
 		$this->presenter = $presenter;
 	}
 
