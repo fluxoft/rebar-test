@@ -2,10 +2,13 @@
 # See: https://circleci.com/docs/configuration-reference
 version: 2.1
 
+orbs:
+  aws-ecr: circleci/aws-ecr@8.2.1
+
 # Define a job to be invoked later in a workflow.
 # See: https://circleci.com/docs/configuration-reference/#jobs
 jobs:
-  test:
+  phpcs:
     docker:
       - image: cimg/php:8.1
     steps:
@@ -20,7 +23,7 @@ jobs:
           paths:
             - ./vendor
       - run:
-          name: "PHP CodeSniffer: Source"
+          name: "PHP CodeSniffer: src/"
           command: "vendor/bin/phpcs --standard=ruleset.xml src/"
   say-hello:
     # Specify the execution environment. You can specify an image from Docker Hub or use one of our convenience images from CircleCI's Developer Hub.
@@ -38,12 +41,20 @@ jobs:
 # Orchestrate jobs using workflows
 # See: https://circleci.com/docs/configuration-reference/#workflows
 workflows:
-  say-hello-workflow:
+  build-and-deploy:
     jobs:
-      - test
+      - phpcs
+      - aws-ecr/build-and-push-image: # orb built-in job
+          repo: '${MY_APP_PREFIX}'
+          tag: '${CIRCLE_SHA1}'
+          requires:
+            - phpcs
+            filters:
+              branches:
+                only: main
       - say-hello:
           requires:
-            - test
+            - phpcs
           filters:
             branches:
               only: main
