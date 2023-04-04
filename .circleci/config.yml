@@ -49,9 +49,9 @@ workflows:
           tag: '${CIRCLE_SHA1}'
           requires:
             - phpcs
-            filters:
-              branches:
-                only: main
+          filters:
+            branches:
+              only: main
       - say-hello:
           requires:
             - phpcs
