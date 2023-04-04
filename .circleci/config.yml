@@ -4,6 +4,7 @@ version: 2.1
 
 orbs:
   aws-ecr: circleci/aws-ecr@8.2.1
+  aws-ecs: circleci/aws-ecs@3.2.0
 
 # Define a job to be invoked later in a workflow.
 # See: https://circleci.com/docs/configuration-reference/#jobs
@@ -52,9 +53,9 @@ workflows:
           filters:
             branches:
               only: main
-      - say-hello:
+      - aws-ecs/deploy-service-update:
+          cluster: '${MY_APP_PREFIX}-cluster'
+          container-image-name-updates: 'container=${MY_APP_PREFIX}-service,tag=${CIRCLE_SHA1}'
+          family: '${MY_APP_PREFIX}-service'
           requires:
-            - phpcs
-          filters:
-            branches:
-              only: main
+            - aws-ecr/build-and-push-image
